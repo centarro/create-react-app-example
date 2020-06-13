@@ -1,0 +1,16 @@
+.testimonial {
+  color: white;
+  margin-bottom: 0;
+  background-image: url("assets/testimonial.png");
+  background-size: cover;
+  background-position: center;
+  padding: 85px 0;
+
+  &__text {
+    font-style: italic;
+  }
+
+  +.footer {
+    margin-top: 0;
+  }
+}

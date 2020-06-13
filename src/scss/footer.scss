@@ -1,0 +1,87 @@
+//
+// Footer
+// --------------------------------------------------
+
+.footer {
+  margin-top: 45px;
+  padding-top: 60px;
+  padding-bottom: 70px;
+  color: $navbar-dark-color;
+  text-transform: uppercase;
+
+  // Branding
+  &--logo {
+    display: block;
+    width: 45px;
+    margin: 10px auto;
+    @include media-breakpoint-up(md) {
+      margin: 10px 20px 15px;
+    }
+    @include media-breakpoint-up(lg) {
+      margin: 10px 0;
+    }
+  }
+
+  // Specific theming for the "powered by" block.
+  .block-system-powered-by-block {
+    text-align: center;
+    margin-bottom: 18px;
+  }
+
+  // Footer content
+  &--contents {
+    text-align: center;
+    // social menu title
+    h2 {
+      font-size: 18px;
+      text-transform: uppercase;
+      margin: 8px 0 15px;
+    }
+    @include media-breakpoint-up(md) {
+      text-align: left;
+    }
+  }
+
+  // Navigation
+  .nav {
+    // General menu elements
+    a {
+      font-size: 18px;
+      color: $navbar-dark-color;
+      &:hover {
+        color: white;
+      }
+    }
+    // overrides for mobile
+    @include media-breakpoint-down(sm) {
+      text-transform: none;
+      display: flex;
+      justify-content: left;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+      .menu__item {
+        width: 100%;
+      }
+      a {
+        font-size: 16px;
+      }
+    }
+
+    // Social menu
+    &.menu-social {
+      justify-content: center;
+      flex-wrap: nowrap;
+      .nav__item {
+        display: inline-block;
+        margin: 0 7px;
+      }
+      @include media-breakpoint-up(md) {
+        justify-content: flex-end;
+        .nav__item:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}
+

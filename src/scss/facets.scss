@@ -1,0 +1,49 @@
+.block-facets {
+  padding: 30px;
+  background-color: $primary-o;
+
+  .block-title {
+    position: relative;
+    margin-bottom: 20px;
+    cursor: pointer;
+
+    &:before {
+      position: absolute;
+      right: 0;
+      color: $primary;
+      font-size: $facet-block-toggle-size;
+      line-height: $h3-font-size;
+      transition: transform .1s linear;
+    }
+
+    &[aria-expanded="false"] {
+      &:before {
+        transform: rotate(45deg);
+      }
+    }
+  }
+
+  label {
+    font-size: $facet-block-text-size;
+  }
+
+  [type="checkbox"]:checked+label {
+    font-weight: bold;
+  }
+}
+
+.facets-widget-checkbox {
+  .item-list__checkbox {
+    margin: 0;
+    padding: 0;
+
+    .facet-item {
+      margin-bottom: 5px;
+      list-style: none;
+
+      .facets-widget- {
+        padding: 10px 0;
+      }
+    }
+  }
+}

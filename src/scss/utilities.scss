@@ -1,0 +1,18 @@
+.form-control.invert {
+  background-color: transparent;
+  color: white;
+}
+
+
+.line {
+  position: relative;
+
+  &:after {
+    display: block;
+    margin: 10px auto;
+    width: 40px;
+    height: 2px;
+    background-color: $primary;
+    content: "";
+  }
+}

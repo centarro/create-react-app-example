@@ -1,0 +1,20 @@
+{
+  "projects": {
+    "default": "commerce-demo-decoupled"
+  },
+  "targets": {
+    "commerce-demo-decoupled": {
+      "hosting": {
+        "prod": [
+          "commerce-demo-decoupled"
+        ],
+        "decoupled_days": [
+          "commerce-decoupled-days-2019"
+        ],
+        "centarro_commerce_demo": [
+          "centarro-commerce-demo"
+        ]
+      }
+    }
+  }
+}

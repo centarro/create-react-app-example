@@ -5,16 +5,22 @@ import {getMappedIncludes} from "@centarro/js-sdk";
 
 class PaymentConfirmed extends PureComponent {
   state = {
+    orderId: this.props.match ? this.props.match.params.orderId : null,
     cart: null,
     included: null
   }
   componentDidMount() {
-    jsonapiClient(process.env.REACT_APP_API_URL, 'fetch_cart')
+    const cartToken = this.props.cart.cartToken
+    jsonapiClient(process.env.REACT_APP_API_URL, `/carts/${this.state.orderId}`, {
+      parameters: {
+        cartToken: cartToken
+      }
+    })
     .then(data => {
-      const { cart, included } = data;
+      const cart = data.data
       this.setState({
-        cart,
-        included: getMappedIncludes(included)
+        cart: cart,
+        included: getMappedIncludes(data.included)
       })
     })
     .catch(err => {
@@ -31,12 +37,12 @@ class PaymentConfirmed extends PureComponent {
           <div className={`row`}>
             <div className={`col-md-6`}>
               <h2>Thanks for your order!</h2>
-              <p>An email receipt has been sent to <em>{this.cart.attributes.email}</em></p>
+              <p>An email receipt has been sent to <em>{this.state.cart.attributes.email}</em></p>
             </div>
             <div className={`col-md-6`}>
             <table className={`table`}>
                 <tbody>
-                {this.cart.relationships.order_items.data.map(orderItemIdentifier => {
+                {this.state.cart.relationships.order_items.data.map(orderItemIdentifier => {
                   const orderItem = this.state.included[orderItemIdentifier.type][orderItemIdentifier.id];
                   return (
                     <tr key={orderItem.id}>
@@ -55,15 +61,15 @@ class PaymentConfirmed extends PureComponent {
                   <td colSpan={2} className={``}>
                     <dl className={`row text-right`}>
                       <dt className="col-10">Subtotal</dt>
-                      <dd className="col-2">{this.cart.attributes.order_total.subtotal.formatted}</dd>
-                      {this.cart.attributes.order_total.adjustments.map(adjustment => (
+                      <dd className="col-2">{this.state.cart.attributes.order_total.subtotal.formatted}</dd>
+                      {this.state.cart.attributes.order_total.adjustments.map(adjustment => (
                         <Fragment key={adjustment.type}>
                           <dt className="col-10">{adjustment.label}</dt>
                           <dd className="col-2">{adjustment.amount.formatted}</dd>
                         </Fragment>
                       ))}
                       <dt className="col-10">Total</dt>
-                      <dd className="col-2">{this.cart.attributes.order_total.total.formatted}</dd>
+                      <dd className="col-2">{this.state.cart.attributes.order_total.total.formatted}</dd>
                     </dl>
                   </td>
                 </tr>

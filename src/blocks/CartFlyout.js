@@ -4,7 +4,7 @@ import { cartRemove, cartUpdateItem } from '../redux/actions/cart'
 import { cartFlyoutClose } from '../redux/actions/cartFlyout'
 import { Link } from 'react-router-dom'
 import { MdClose } from 'react-icons/md'
-import { getMappedIncludes } from '@centarro/js-sdk'
+import { getMappedIncludes, getRelationshipFromMappedIncludes } from '@centarro/js-sdk'
 
 const closeFlyout = (dispatch) => dispatch(cartFlyoutClose());
 
@@ -34,12 +34,12 @@ const CartFlyout = (props) => {
                   <table className={`cart-block--offcanvas-cart-table table`}>
                     <tbody>
                     {carts[0].relationships.order_items.data.map(rel => mappedIncludes[rel.type][rel.id]).map(orderItem => {
-                      const purchasedEntityRelationship = orderItem.relationships.purchased_entity.data;
-                      const purchaseEntity = mappedIncludes[purchasedEntityRelationship.type][purchasedEntityRelationship.id]
+                      const purchaseEntity = getRelationshipFromMappedIncludes(orderItem, 'purchased_entity', mappedIncludes);
+                      const product = getRelationshipFromMappedIncludes(purchaseEntity, 'product_id', mappedIncludes);
                       return (
                         <tr key={orderItem.id}>
                           <td className="cart-block--offcanvas-cart-table__title align-middle w-50">
-                            <Link className={`text-light`} to={`/product/${purchaseEntity.relationships.product_id.data.type.split('--').pop()}/${purchaseEntity.relationships.product_id.data.id}`}>{orderItem.attributes.title}</Link>
+                            <Link className={`text-light`} to={product.attributes.path.alias}>{orderItem.attributes.title}</Link>
                           </td>
                           <td className="cart-block--offcanvas-cart-table__quantity align-middle w-25">
                             <input className="form-control invert" type={`number`} min={0} value={parseInt(orderItem.attributes.quantity)} onChange={e => {

@@ -9,7 +9,7 @@ const ProductFeatured = (props) => {
   const defaultVariation = getRelationshipFromMappedIncludes(product, 'variations', included)[0]
   const variationImageRelationship = defaultVariation.relationships.images.data[0];
   const variationImage = included[variationImageRelationship.type][variationImageRelationship.id];
-  const Url = `/product/${product.type.split('--').pop()}/${product.id}`;
+  const Url = product.attributes.path.alias;
 
   return (
       <div className={`commerce-product--catalog`}>

@@ -33,11 +33,13 @@ export async function jsonapiClient(
     case 'carts':
     case 'fetch_cart':
       return await httpClient.getCart({
+        'product--simple': ['path'],
+        'product--clothing': ['path'],
         'product-variation--simple': ['product_id'],
         'product-variation--clothing': ['product_id'],
         'order-item--product-variation': ['title', 'quantity', 'unit_price', 'total_price', 'purchased_entity', 'order_id'],
         'order--physical': ['email', 'billing_information', 'shipping_information', 'total_price', 'order_total', 'coupons', 'order_items']
-      });
+      }, ['order_items.purchased_entity.product_id']);
 
     case 'add_to_cart':
       return await httpClient.addToCart(parameters.purchasedEntity, parameters.quantity || 1, {
@@ -71,13 +73,16 @@ export async function jsonapiClient(
     case 'taxonomy_term':
       return await httpClient.request(`/taxonomy_term/${parameters.type}`);
 
+    case 'menu':
+      return await httpClient.request(`/menu_items/main`);
+
     case 'featured_products':
       return await httpClient.request(`/products/simple`, {
         includes: ['variations', 'variations.images'],
         fields: {
-          'product--simple': ['title', 'variations'],
+          'product--simple': ['title', 'variations', 'path'],
           'product-variation--simple': ['resolved_price', 'prices', 'images'],
-          'product--clothing': ['title', 'variations'],
+          'product--clothing': ['title', 'variations', 'path'],
           'product-variation--clothing': ['resolved_price', 'prices', 'images'],
           'file--file': ['uri'],
         },
@@ -94,14 +99,14 @@ export async function jsonapiClient(
       return await httpClient.request(`/products`, {
         includes: ['variations', 'variations.images'],
         fields: {
-          'product--simple': ['title', 'variations'],
+          'product--simple': ['title', 'variations', 'path'],
           'product-variation--simple': ['resolved_price', 'prices', 'images'],
-          'product--clothing': ['title', 'variations'],
+          'product--clothing': ['title', 'variations', 'path'],
           'product-variation--clothing': ['resolved_price', 'prices', 'images'],
           'file--file': ['uri'],
         },
         filter: {
-          'product_categories.entity.name': parameters.name
+          'product_categories.id': parameters.id
         },
         page: {
           limit: 6

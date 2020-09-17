@@ -5,7 +5,7 @@ import ProductDisplay from './jsonapi';
 
 class ProductDisplayContainer extends PureComponent {
     componentDidMount() {
-      const {productType, productId} = this.props.match.params
+      const {productType, productId} = this.props;
       this.props.getProduct(productType, productId);
     }
     render() {

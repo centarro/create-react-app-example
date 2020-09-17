@@ -35,11 +35,12 @@ const CartPage = ({ cart: { carts, included, cartToken }, dispatch, history }) =
               <table className={`table my-4`}>
                 <tbody>
                 {cartItems.map(orderItem => {
-                  const purchaseEntity = getRelationshipFromMappedIncludes(orderItem, 'purchased_entity', mappedIncludes)
+                      const purchaseEntity = getRelationshipFromMappedIncludes(orderItem, 'purchased_entity', mappedIncludes);
+                      const product = getRelationshipFromMappedIncludes(purchaseEntity, 'product_id', mappedIncludes);
                   return (
                     <tr key={orderItem.id}>
                       <td className="cart-block--offcanvas-cart-table__title w-50">
-                        <Link className={``} to={`/product/${purchaseEntity.relationships.product_id.data.id}`}>{orderItem.attributes.title}</Link>
+                        <Link to={product.attributes.path.alias}>{orderItem.attributes.title}</Link>
                       </td>
                       <td className="cart-block--offcanvas-cart-table__quantity">
                         <input className="form-control" type={`number`} size={5} min={0} defaultValue={parseInt(orderItem.attributes.quantity)} onChange={e => {

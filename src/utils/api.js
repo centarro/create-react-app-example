@@ -43,19 +43,23 @@ export async function jsonapiClient(
 
     case 'add_to_cart':
       return await httpClient.addToCart(parameters.purchasedEntity, parameters.quantity || 1, {
+        'product--simple': ['path'],
+        'product--clothing': ['path'],
         'product-variation--simple': ['product_id'],
         'product-variation--clothing': ['product_id'],
         'order-item--product-variation': ['title', 'quantity', 'unit_price', 'total_price', 'purchased_entity', 'order_id'],
         'order--physical': ['email', 'billing_information', 'shipping_information', 'total_price', 'order_total', 'coupons', 'order_items']
-      })
+      }, ['order_id.order_items.purchased_entity.product_id'])
 
     case 'update_cart_item':
       return await httpClient.updateCartItem(parameters.orderItem, parameters.quantity, {
+        'product--simple': ['path'],
+        'product--clothing': ['path'],
         'product-variation--simple': ['product_id'],
         'product-variation--clothing': ['product_id'],
         'order-item--product-variation': ['title', 'quantity', 'unit_price', 'total_price', 'purchased_entity', 'order_id'],
         'order--physical': ['total_price', 'order_total', 'coupons', 'order_items'],
-      }, ['order_id', 'order_id.order_items', 'order_id.order_items.purchased_entity'])
+      }, ['order_id', 'order_id.order_items', 'order_id.order_items.purchased_entity', 'order_id.order_items.purchased_entity.product_id'])
 
     case 'remove_cart_item':
       return await httpClient.removeCartItem(parameters.orderItem)

@@ -58,7 +58,7 @@ export default () => (
               <a href="https://www.linkedin.com/groups/3787490"  className={`nav-link`}> <FaYoutube size={32}/><span className="sr-only">YouTube</span></a>
             </li>
             <li className={`nav-item`}>
-              <a href={`https://github.com/mglaman/commerce_demo_decoupled`}  className={`nav-link`}> <FaGithub size={32}/><span className={`sr-only`}>GitHub</span></a>
+              <a href={`https://github.com/centarro/create-react-app-example`}  className={`nav-link`}> <FaGithub size={32}/><span className={`sr-only`}>GitHub</span></a>
             </li>
           </ul>
         </nav>

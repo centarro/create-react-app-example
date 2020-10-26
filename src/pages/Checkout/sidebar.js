@@ -22,7 +22,7 @@ const Sidebar = (props) => {
           return (
             <tr key={orderItem.id}>
               <td className="cart-block--offcanvas-cart-table__title w-50">
-                <Link className={``} to={`/product/purchaseEntity.relationships.product_id.data.type.split('--').pop()}/${purchaseEntity.relationships.product_id.data.id}`}>{orderItem.attributes.title}</Link>
+                <Link className={``} to={`/product/${purchaseEntity.relationships.product_id.data.type.split('--').pop()}/${purchaseEntity.relationships.product_id.data.id}`}>{orderItem.attributes.title}</Link>
               </td>
               <td className="cart-block--offcanvas-cart-table__price w-15">
               {orderItem.attributes.total_price.formatted}

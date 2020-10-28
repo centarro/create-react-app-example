@@ -28,8 +28,12 @@ class App extends Component {
   render() {
     return (
       <PayPalScriptProvider options={{
+        // @todo add hosted-fields
+        'components': 'buttons',
         'client-id': process.env.REACT_APP_PAYPAL_SB_CLIENT_ID,
         'data-partner-attribution-id': 'CommerceGuys_Cart_SPB',
+        // @todo add when hosted fields is supported.
+        // 'data-client-token': process.env.REACT_APP_PAYPAL_SB_CLIENT_TOKEN,
       }}>
       <Provider store={store}>
         <ConnectedRouter history={history}>

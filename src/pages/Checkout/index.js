@@ -17,7 +17,7 @@ const CheckoutActions = ({ currentStep }) => {
     buttonText = 'Continue to payment method';
   }
   else {
-    buttonText = 'Complete checkout'
+    return null;
   }
   return (
     <div className={`d-flex justify-content-between align-items-center mt-4`}>

@@ -6,7 +6,6 @@ import CartSummary from "../../blocks/CartSummary";
 
 const Sidebar = (props) => {
   const {checkout: { orderData, included } } = props
-  console.log(orderData)
   if (orderData === null) {
     return <div key={`loading`}>Loading...</div>
   }

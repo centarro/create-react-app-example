@@ -59,26 +59,17 @@ const Checkout = (props) => {
 
       const orderDataBillingAddress = orderDataBillingInformation ? (orderDataBillingInformation.address || {}) : {}
       setBillingAddress({
-        ...billingAddress,
         ...orderDataBillingAddress,
         country_code: 'US'
       })
       const orderDataShippingAddress = orderDataShippingInformation ? (orderDataShippingInformation.address || {}) : {}
       setShippingAddress({
-        ...shippingAddress,
         ...orderDataShippingAddress,
         country_code: 'US'
       })
       setSelectedShippingMethod(checkout.orderData.attributes.shipping_method || '2--default');
     }
   }, [checkout.orderData])
-
-  const onShippingAddressElementChange = (elementName, type) => {
-    return (event) => {
-      shippingAddress[type] = event.target.value;
-      setShippingAddress(shippingAddress)
-    }
-  }
   const onShippingMethodChange = event => {
     setSelectedShippingMethod(event.target.value)
     patchCheckout(
@@ -148,8 +139,9 @@ const Checkout = (props) => {
                   <h3>Shipping information</h3>
                   <Address
                     elementName={`shipping`}
-                    handleChange={onShippingAddressElementChange}
-                    value={shippingAddress}/>
+                    setAddress={setShippingAddress}
+                    address={shippingAddress}
+                    />
                 </div>
               )}
               {checkout.currentStep === 'shippingMethod' && (
@@ -159,7 +151,9 @@ const Checkout = (props) => {
                 selectedShippingMethod={selectedShippingMethod}
                 />
               )}
-              {checkout.currentStep === 'paymentMethod' && (<PaymentMethod />)}
+              {checkout.currentStep === 'paymentMethod' && (
+                <PaymentMethod billingAddress={billingAddress} setBillingAddress={setBillingAddress} />
+                )}
               <CheckoutActions currentStep={checkout.currentStep} />
             </form>
           </div>

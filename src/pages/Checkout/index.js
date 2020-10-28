@@ -30,8 +30,21 @@ const CheckoutActions = ({ currentStep }) => {
 const Checkout = (props) => {
   const { cart: cartReducer, checkout, patchCheckout, getCheckout } = props;
   const [emailAddress, setEmailAddress] = useState("")
-  const [billingAddress, setBillingAddress] = useState({})
-  const [shippingAddress, setShippingAddress] = useState({})
+  const [billingAddress, setBillingAddress] = useState({
+    address_line1: '',
+    address_line2: '',
+    locality: '',
+    administrative_area: '',
+    postal_code: '',
+  })
+  const [shippingAddress, setShippingAddress] = useState({
+    address_line1: '',
+    address_line2: '',
+    locality: '',
+    administrative_area: '',
+    postal_code: '',
+  })
+  const [selectedShippingMethod, setSelectedShippingMethod] = useState('2--default');
 
   useEffect(() => {
     if (cartReducer.carts.length) {
@@ -40,45 +53,51 @@ const Checkout = (props) => {
   }, [cartReducer.carts])
   useEffect(() => {
     if (checkout.orderData) {
-      console.log(checkout.orderData)
       setEmailAddress(checkout.orderData.attributes.email || "");
 
-      const { billing_information: orderDataBillingInformation, shipping_information: orderDataShippingInformation } = props.checkout.orderData.attributes;
+      const { billing_information: orderDataBillingInformation, shipping_information: orderDataShippingInformation } = checkout.orderData.attributes;
 
       const orderDataBillingAddress = orderDataBillingInformation ? (orderDataBillingInformation.address || {}) : {}
       setBillingAddress({
-        ...orderDataBillingAddress,
         ...billingAddress,
+        ...orderDataBillingAddress,
         country_code: 'US'
       })
       const orderDataShippingAddress = orderDataShippingInformation ? (orderDataShippingInformation.address || {}) : {}
       setShippingAddress({
-        ...orderDataShippingAddress,
         ...shippingAddress,
+        ...orderDataShippingAddress,
         country_code: 'US'
       })
+      setSelectedShippingMethod(checkout.orderData.attributes.shipping_method || '2--default');
     }
   }, [checkout.orderData])
 
   const onShippingAddressElementChange = (elementName, type) => {
     return (event) => {
       shippingAddress[type] = event.target.value;
-      console.log(shippingAddress);
       setShippingAddress(shippingAddress)
     }
   }
+  const onShippingMethodChange = event => {
+    setSelectedShippingMethod(event.target.value)
+    patchCheckout(
+      checkout.orderData, {
+        'shipping_method': event.target.value,
+      }
+    )
+  };
   const onFormSubmit = (event) => {
     event.preventDefault();
-    if (props.checkout.currentStep === 'customerInformation') {
+    if (checkout.currentStep === 'customerInformation') {
       const shipping_information = {
         address: {
-          ...props.checkout.orderData.attributes.shipping_information,
           ...shippingAddress,
           country_code: 'US'
         }
       };
-      const test = props.patchCheckout(
-        props.checkout.orderData, {
+      const test = patchCheckout(
+        checkout.orderData, {
           shipping_information,
         }
       )
@@ -86,13 +105,21 @@ const Checkout = (props) => {
         props.checkoutChangeStep('shippingMethod');
       })
     }
-    else if (props.checkout.currentStep === 'shippingMethod') {
-      props.checkoutChangeStep('paymentMethod')
+    else if (checkout.currentStep === 'shippingMethod') {
+      const test = patchCheckout(
+        checkout.orderData, {
+          'shipping_method': selectedShippingMethod,
+        }
+      )
+      test.finally(() => {
+        props.checkoutChangeStep('paymentMethod')
+      })
     }
     else {
       alert('payment made?')
     }
   }
+
   return (
     <div className={`container-fluid`}>
       <div className={`container`}>
@@ -125,7 +152,13 @@ const Checkout = (props) => {
                     value={shippingAddress}/>
                 </div>
               )}
-              {checkout.currentStep === 'shippingMethod' && (<ShippingMethod orderData={checkout.orderData} />)}
+              {checkout.currentStep === 'shippingMethod' && (
+                <ShippingMethod
+                orderData={checkout.orderData}
+                handleChange={onShippingMethodChange}
+                selectedShippingMethod={selectedShippingMethod}
+                />
+              )}
               {checkout.currentStep === 'paymentMethod' && (<PaymentMethod />)}
               <CheckoutActions currentStep={checkout.currentStep} />
             </form>

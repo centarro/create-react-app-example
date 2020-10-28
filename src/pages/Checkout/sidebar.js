@@ -5,24 +5,24 @@ import {getMappedIncludes, getRelationshipFromMappedIncludes} from "@centarro/js
 import CartSummary from "../../blocks/CartSummary";
 
 const Sidebar = (props) => {
-  const {cart: {carts, included}} = props
-  if (carts.length === 0) {
+  const {checkout: { orderData, included } } = props
+  console.log(orderData)
+  if (orderData === null) {
     return <div key={`loading`}>Loading...</div>
   }
-  const cart = carts[0]
   const mappedIncludes = getMappedIncludes(included)
-
   return (
     <Fragment>
       <h3>Order summary</h3>
       <table className={`table`}>
         <tbody>
-        {getRelationshipFromMappedIncludes(cart,'order_items', mappedIncludes).map(orderItem => {
+        {getRelationshipFromMappedIncludes(orderData,'order_items', mappedIncludes).map(orderItem => {
           const purchaseEntity = getRelationshipFromMappedIncludes(orderItem, 'purchased_entity', mappedIncludes)
+          const product = getRelationshipFromMappedIncludes(purchaseEntity, 'product_id', mappedIncludes);
           return (
             <tr key={orderItem.id}>
               <td className="cart-block--offcanvas-cart-table__title w-50">
-                <Link className={``} to={`/product/purchaseEntity.relationships.product_id.data.type.split('--').pop()}/${purchaseEntity.relationships.product_id.data.id}`}>{orderItem.attributes.title}</Link>
+                <Link className={``} to={product.attributes.path.alias}>{orderItem.attributes.title}</Link>
               </td>
               <td className="cart-block--offcanvas-cart-table__price w-15">
               {orderItem.attributes.total_price.formatted}
@@ -34,7 +34,7 @@ const Sidebar = (props) => {
         <tfoot>
         <tr>
           <td colSpan={2}>
-            <CartSummary cart={cart} />
+            <CartSummary cart={orderData} />
           </td>
         </tr>
         </tfoot>
@@ -42,5 +42,5 @@ const Sidebar = (props) => {
     </Fragment>
   )
 }
-const mapStateToProps = ({cart}) => ({cart})
+const mapStateToProps = ({cart, checkout}) => ({cart, checkout})
 export default connect(mapStateToProps)(Sidebar);

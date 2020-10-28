@@ -133,7 +133,7 @@ export async function jsonapiClient(
           'taxonomy_term--special_categories': ['name'],
           'taxonomy_term--brands': ['name'],
           'file--file': ['uri'],
-          [productFieldsKey]: ['title', 'body', 'variations', 'special_categories', 'product_categories', 'brand', 'stores'],
+          [productFieldsKey]: ['title', 'body', 'variations', 'special_categories', 'product_categories', 'brand', 'stores', 'metatag'],
           [variationFieldsKey]: queryVariationFields
         },
         includes: queryInclude
@@ -141,17 +141,21 @@ export async function jsonapiClient(
 
     case 'get_checkout':
       return await httpClient.getCheckout(parameters.cart, {
+        'product--simple': ['path'],
+        'product--clothing': ['path'],
         'product-variation--simple': ['product_id'],
         'product-variation--clothing': ['product_id'],
         'order-item--product-variation': ['title', 'quantity', 'unit_price', 'total_price', 'purchased_entity', 'order_id'],
-      }, ['order_items', 'order_items.purchased_entity'])
+      }, ['order_items', 'order_items.purchased_entity', 'order_items.purchased_entity.product_id'])
 
     case 'patch_checkout':
       return await httpClient.patchCheckout(parameters.cart, parameters.attributes, {
+        'product--simple': ['path'],
+        'product--clothing': ['path'],
         'product-variation--simple': ['product_id'],
         'product-variation--clothing': ['product_id'],
         'order-item--product-variation': ['title', 'quantity', 'unit_price', 'total_price', 'purchased_entity', 'order_id'],
-      }, ['order_items', 'order_items.purchased_entity'])
+      }, ['order_items', 'order_items.purchased_entity', 'order_items.purchased_entity.product_id'])
 
     default:
       return await httpClient.request(endpoint)

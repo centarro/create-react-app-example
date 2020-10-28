@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import usStates from '../../utils/us-states.json'
 
-const Address = ({elementName, handleChange, value = {}}) => (
+const Address = ({elementName, handleChange, value }) => (
   <div>
     <div className="form-group">
       <label htmlFor="inputAddress">Address</label>

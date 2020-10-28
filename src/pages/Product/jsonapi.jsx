@@ -12,8 +12,8 @@ const Product = ({ data, included, selectedVariation }) => {
 
     const productBrand = getRelationshipFromMappedIncludes(data, 'brand', included);
 
-    const productCategories = getRelationshipFromMappedIncludes(data, 'product_categories', included);
-    const specialCategories = getRelationshipFromMappedIncludes(data, 'special_categories', included);
+    const productCategories = getRelationshipFromMappedIncludes(data, 'product_categories', included) || [];
+    const specialCategories = getRelationshipFromMappedIncludes(data, 'special_categories', included) || [];
 
     const stores = data.relationships.stores.data.map(rel => rel.id);
     const isPurchasable = !stores.includes(localStorage.getItem('currentStoreId') || process.env.REACT_APP_STORE_UUID);

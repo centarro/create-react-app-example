@@ -21,7 +21,7 @@ const PageFactory = ({ location: { pathname }}) => {
     return <p>Not found</p>
   }
   if (page.jsonapi.resourceName === "term--product-categories") {
-    return <Catalog categoryId={page.entity.uuid}  />
+    return <Catalog term={page.entity} categoryId={page.entity.uuid}  />
   }
   if (page.jsonapi.resourceName.indexOf('product--') === 0) {
     return <Product productType={page.jsonapi.resourceName.split('--').pop()} productId={page.entity.uuid} />

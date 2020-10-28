@@ -100,7 +100,7 @@ export async function jsonapiClient(
       });
 
     case 'catalog_products':
-      return await httpClient.request(`/products`, {
+      return await httpClient.request(`/index/products`, {
         includes: ['variations', 'variations.images'],
         fields: {
           'product--simple': ['title', 'variations', 'path'],
@@ -110,7 +110,7 @@ export async function jsonapiClient(
           'file--file': ['uri'],
         },
         filter: {
-          'product_categories.id': parameters.id
+          'field_product_categories': parameters.id
         },
         page: {
           limit: 6

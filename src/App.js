@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router'
 import configureStore, { history } from './redux/configureStore';
 import { generateCartToken } from '@centarro/js-sdk'
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 import Header from './blocks/Header';
 import CatalogMenu from './blocks/CatalogMenu'
@@ -26,6 +27,10 @@ class App extends Component {
 
   render() {
     return (
+      <PayPalScriptProvider options={{
+        'client-id': process.env.REACT_APP_PAYPAL_SB_CLIENT_ID,
+        'data-partner-attribution-id': 'CommerceGuys_Cart_SPB',
+      }}>
       <Provider store={store}>
         <ConnectedRouter history={history}>
         <div className="App">
@@ -44,6 +49,7 @@ class App extends Component {
           </div>
         </ConnectedRouter>
       </Provider>
+      </PayPalScriptProvider>
     );
   }
 }

@@ -7,7 +7,7 @@ import PayPalCheckout from './PayPalCheckout';
 import {getMappedIncludes, getRelationshipFromMappedIncludes} from "@centarro/js-sdk";
 import CartSummary from "../../blocks/CartSummary";
 
-const CartPage = ({ cart: { carts, included, cartToken }, dispatch, history }) => {
+const CartPage = ({ cart: { carts, included, cartToken }, dispatch }) => {
   if (carts.length === 0) {
     return (<div className={`container`} key={`no_items`}>
       <div className={`row`}>
@@ -73,7 +73,7 @@ const CartPage = ({ cart: { carts, included, cartToken }, dispatch, history }) =
               </div>
             </div>
             <div className={`col-sm-4 text-right my-4`}>
-            <PayPalCheckout cart={cart} cartToken={cartToken} history={history} />
+            <PayPalCheckout cartId={cart.id} />
             </div>
           </div>
           <div className={`row`}>

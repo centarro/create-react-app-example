@@ -1,11 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { connect } from 'react-redux'
+import { push } from 'connected-react-router'
+import { PayPalButtons } from "@paypal/react-paypal-js";
 
-const paypal = window.paypal;
-let PayPalButton = paypal.Buttons.driver('react', { React, ReactDOM });
-
-const PayPalCheckout = ({ cart, cartToken, history }) => {
+const PayPalCheckout = ({ cartId, cart: { cartToken }, dispatch }) => {
+  console.log(dispatch);
   const options = {};
   options.method = 'POST';
   options.headers = {};
@@ -13,10 +12,10 @@ const PayPalCheckout = ({ cart, cartToken, history }) => {
   options.headers.Accept = 'application/vnd.api+json';
   options.headers['Commerce-Cart-Token'] = cartToken;
 
-  return <PayPalButton
+  return <PayPalButtons
     createOrder={(data, actions) => {
       return fetch(
-        `${process.env.REACT_APP_API_URL}/commerce-paypal/checkout-create/paypal_checkout/${cart.id}`,
+        `${process.env.REACT_APP_API_URL}/commerce-paypal/checkout-create/paypal_checkout/${cartId}`,
         options
         )
       .then(res => res.json())
@@ -31,12 +30,12 @@ const PayPalCheckout = ({ cart, cartToken, history }) => {
       // const payer = details.payer.name;
       // const status = details.status;
       return fetch(
-        `${process.env.REACT_APP_API_URL}/jsonapi/checkout/${cart.id}/payment/return`,
+        `${process.env.REACT_APP_API_URL}/jsonapi/checkout/${cartId}/payment/return`,
         options
         )
       .then(res => res.json())
       .then(details => {
-        history.push(`/checkout/${cart.id}/complete`);
+        dispatch(push(`/checkout/${cartId}/complete`));
       })
       .catch(err => {
         console.error(err);
@@ -45,4 +44,6 @@ const PayPalCheckout = ({ cart, cartToken, history }) => {
     }}
   />;
 }
-export default connect()(PayPalCheckout);
+
+const mapStateToProps = ({ cart }) => ({ cart });
+export default connect(mapStateToProps)(PayPalCheckout);

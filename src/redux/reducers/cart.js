@@ -18,8 +18,8 @@ export default handleActions({
     const { cart, included } = payload;
     return {
       ...state,
-      carts: [cart],
-      included,
+      carts: cart ? [cart] : [],
+      included: included ? included : [],
       itemCount: included ? included
       .filter(item => item.type.indexOf('order-item--') === 0)
       .reduce((previousValue, currentValue) => {

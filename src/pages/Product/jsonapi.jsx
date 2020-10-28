@@ -1,6 +1,8 @@
 import React from 'react'
 import VariationsAddToCart from './AddToCart/variations'
 import SimpleAddToCart from './AddToCart/simple'
+import { Helmet } from 'react-helmet';
+import { getRelationshipFromMappedIncludes } from '@centarro/js-sdk';
 
 const Product = ({ data, included, selectedVariation }) => {
     const variations = data.relationships.variations.data;
@@ -8,19 +10,19 @@ const Product = ({ data, included, selectedVariation }) => {
     const variationImageRelationship = selectedVariation.relationships.images.data[0];
     const variationImage = included[variationImageRelationship.type][variationImageRelationship.id]
 
-    const productBrandRelationship = data.relationships.brand.data;
-    const productBrand = included[productBrandRelationship.type][productBrandRelationship.id]
+    const productBrand = getRelationshipFromMappedIncludes(data, 'brand', included);
 
-    const productCategoriesRelationship = data.relationships.product_categories.data;
-    const productCategories = productCategoriesRelationship.map(rel => included[rel.type][rel.id]);
-    const specialCategoriesRelationship = data.relationships.special_categories.data || [];
-    const specialCategories = specialCategoriesRelationship.map(rel => included[rel.type][rel.id]);
+    const productCategories = getRelationshipFromMappedIncludes(data, 'product_categories', included);
+    const specialCategories = getRelationshipFromMappedIncludes(data, 'special_categories', included);
 
     const stores = data.relationships.stores.data.map(rel => rel.id);
     const isPurchasable = !stores.includes(localStorage.getItem('currentStoreId') || process.env.REACT_APP_STORE_UUID);
 
     return (
       <div className={`container-fluid`}>
+        <Helmet>
+          <title>{data.attributes.title} | Commerce Demo</title>
+        </Helmet>
         <div className={`container commerce-product--full`}>
           <div className={`row`}>
               <div className={`col-md-6`}>

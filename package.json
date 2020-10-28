@@ -14,6 +14,7 @@
     "qs": "^6.7.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
+    "react-helmet": "^6.1.0",
     "react-icons": "^3.4.0",
     "react-placeholder": "^3.0.2",
     "react-redux": "^6.0.1",
